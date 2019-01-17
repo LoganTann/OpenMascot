@@ -76,7 +76,7 @@
         XCloseDisplay(display);
     }
 
-    bool setTransparency(Window wnd, unsigned char alpha)
+/*    bool setTransparency(Window wnd, unsigned char alpha)
     {
         Display* display = XOpenDisplay(NULL);
         unsigned long opacity = (0xffffffff / 0xff) * alpha;
@@ -93,7 +93,7 @@
             XCloseDisplay(display);
             return false;
         }
-    }
+    }*/
 #undef None // None conflicts with SFML
 /*    
 #elif defined (SFML_SYSTEM_MACOS)

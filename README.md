@@ -1,2 +1,10 @@
-# shimeji-RE
-A shimeji software rewriting by zero in cpp
+SHIMEJI
+===================
+
+
+
+
+### Compiling
+
+Linux:
+g++ Transparent.cpp -lsfml-graphics -lsfml-window -lsfml-system -lX11 -lXext

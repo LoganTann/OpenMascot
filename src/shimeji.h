@@ -7,6 +7,7 @@ public:
 	Shimeji();
 	int update();
 	int changeImg(int index=0);
+	int fall(bool on=true);
 
 private :
 	//sfml
@@ -21,13 +22,17 @@ private :
 	int taskbarW = 40,
         spritew = 128,
         spriteh = 128,
-    	x = (scrw - spritew) / 2,
-        y = 0 - spriteh,
-        scrw, scrh, //value in init
+        scrw = sf::VideoMode::getDesktopMode().width,
+        scrh = sf::VideoMode::getDesktopMode().height - taskbarW,
+    	x = 10 + (rand() % static_cast<int>(scrw-138 - 10 + 1)),
+        y = 0 - 120,
+        initialy = y,
+        initialx = x,
         initialWinx, initialWiny,
         initialMousex, initialMousey;
 
-    float g = 0.0005;
+    sf::Vector2i grabbedOffset;
+    //float g = 0.5;
 
     bool falling = true, mousePressing = false, shapeOk = false;
 };

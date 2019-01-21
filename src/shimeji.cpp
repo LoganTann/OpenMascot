@@ -6,9 +6,6 @@
 Shimeji::Shimeji(){
 	window.create(sf::VideoMode(128,128, 32), "Shimeji", sf::Style::None);
 	defaultProp(window.getSystemHandle());
-    scrw = sf::VideoMode::getDesktopMode().width;
-    scrh = sf::VideoMode::getDesktopMode().height - taskbarW;
-    x = 10 + (rand() % static_cast<int>(scrw-138 - 10 + 1));
     window.setPosition(sf::Vector2i(x, y));
 	window.setFramerateLimit(60);
 
@@ -27,12 +24,11 @@ Shimeji::Shimeji(){
 
     changeImg(1);
 
-	startFalling = clock.getElapsedTime();
+	fall();
 }
 
 int Shimeji::update(){
     sf::Event event;
-    sf::Vector2i grabbedOffset;
     bool grabbedWindow = false;
     while (window.pollEvent(event)) {
         if (event.type == sf::Event::Closed || (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape))
@@ -42,17 +38,22 @@ int Shimeji::update(){
                 if (!mousePressing) {
                     mousePressing = true;
                 	grabbedOffset = window.getPosition() - sf::Mouse::getPosition();
+                	fall(false);
                 }
             }
         }
         else if (event.type == sf::Event::MouseButtonReleased){
             if (event.mouseButton.button == sf::Mouse::Left){
                 if (mousePressing) mousePressing = false;
+            	fall();
             }
         }
         else if (event.type == sf::Event::MouseMoved) {
             if (mousePressing){
-            	window.setPosition(sf::Mouse::getPosition() + grabbedOffset);
+            	sf::Vector2i pos = sf::Mouse::getPosition() + grabbedOffset;
+            	x = pos.x;
+            	y = pos.y;
+            	window.setPosition(pos);
             }
         }
 
@@ -64,25 +65,33 @@ int Shimeji::update(){
 
     }
     if (falling) {
-        //pos=(1/2)*Acceleration*temps
-        int t( clock.getElapsedTime().asMilliseconds()-startFalling.asMilliseconds() );
-        y = 0.5*g*(t*t); 
+        float t = clock.getElapsedTime().asMilliseconds()-startFalling.asMilliseconds();
+        y = initialy + 0.0001 * (t*t); 
         if (y>scrh-spriteh) {
-            falling = false;
             y = scrh-spriteh; 
-            changeImg(0);
+            fall(false);
         }
         window.setPosition(sf::Vector2i( x, y));
-    }
-    else if (y<scrh-spriteh && !mousePressing){
-        startFalling = clock.getElapsedTime();
-        falling = true;
     }
 
     window.clear(sf::Color::Transparent);
     window.draw(toDisplay);
     window.display();
     return 0;
+}
+
+int Shimeji::fall(bool on){
+	if (on) {
+		initialy = y;
+		initialx = x;
+		startFalling = clock.getElapsedTime();
+		falling=true;
+        changeImg(1);
+	} else {
+		falling=false;
+		changeImg(0);
+	}
+	return 0;
 }
 
 int Shimeji::changeImg(int index){

@@ -5,18 +5,25 @@
 
 Shimeji::Shimeji(){
 	window.create(sf::VideoMode(128,128, 32), "Shimeji", sf::Style::None);
+	defaultProp(window.getSystemHandle());
     scrw = sf::VideoMode::getDesktopMode().width;
     scrh = sf::VideoMode::getDesktopMode().height - taskbarW;
+    x = 10 + (rand() % static_cast<int>(scrw-138 - 10 + 1));
     window.setPosition(sf::Vector2i(x, y));
 	window.setFramerateLimit(60);
 
 	/*   fallingImg.loadFromFile("img/shime4.png");
     simpleImg.loadFromFile("img/shime1.png");*/
-	sf::Image newFrame;
+    sf::Image newImg;
+	sf::Texture newFrame;
     frames.push_back(newFrame);
     frames.push_back(newFrame);
-    frames[0].loadFromFile("img/shime1.png");
-    frames[1].loadFromFile("img/shime4.png");
+    framesI.push_back(newImg);
+    framesI.push_back(newImg);
+    framesI[0].loadFromFile("img/shime1.png");
+    framesI[1].loadFromFile("img/shime4.png");
+    frames[0].loadFromImage(framesI[0]);
+    frames[1].loadFromImage(framesI[1]);
 
     changeImg(1);
 
@@ -25,6 +32,8 @@ Shimeji::Shimeji(){
 
 int Shimeji::update(){
     sf::Event event;
+    sf::Vector2i grabbedOffset;
+    bool grabbedWindow = false;
     while (window.pollEvent(event)) {
         if (event.type == sf::Event::Closed || (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape))
             return -1;
@@ -32,10 +41,7 @@ int Shimeji::update(){
             if (event.mouseButton.button == sf::Mouse::Left){
                 if (!mousePressing) {
                     mousePressing = true;
-                    initialWinx = x - event.mouseButton.x;
-                    initialWiny = y - event.mouseButton.y;
-                    initialMousex = event.mouseButton.x;
-                    initialMousey = event.mouseButton.y;
+                	grabbedOffset = window.getPosition() - sf::Mouse::getPosition();
                 }
             }
         }
@@ -46,17 +52,16 @@ int Shimeji::update(){
         }
         else if (event.type == sf::Event::MouseMoved) {
             if (mousePressing){
-                /*std::cout << "initialWinx: " << initialWinx << std::endl;
-                std::cout << "initialWiny: " << initialWiny << std::endl;
-                std::cout << "initialMousex: " << initialMousex << std::endl;
-                std::cout << "initialMousey: " << initialMousey << std::endl;
-                std::cout << "new mouse x: " << event.mouseMove.x << std::endl;
-                std::cout << "new mouse y: " << event.mouseMove.y << std::endl;*/
-                x -= initialMousex - event.mouseMove.x;
-                y -= initialMousey - event.mouseMove.y;
-                window.setPosition(sf::Vector2i(x, y));
+            	window.setPosition(sf::Mouse::getPosition() + grabbedOffset);
             }
         }
+
+        else if (event.type == sf::Event::KeyPressed)
+        {
+            if (event.key.code == sf::Keyboard::Escape)
+                window.close();
+        }
+
     }
     if (falling) {
         //pos=(1/2)*Acceleration*temps
@@ -81,7 +86,7 @@ int Shimeji::update(){
 }
 
 int Shimeji::changeImg(int index){
-	toDisplay = frames[index];
-	shapeOk = setShape(window.getSystemHandle(), toDisplay);
+	toDisplay.setTexture(frames[index]);
+	shapeOk = setShape(window.getSystemHandle(), framesI[index]);
 	return 0;
 }

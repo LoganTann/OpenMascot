@@ -7,6 +7,7 @@
 #include <X11/extensions/shape.h>
 
 bool setShape(Window wnd, const sf::Image& image);
+bool defaultProp(Window window);
 //bool setTransparency(Window wnd, unsigned char alpha);
 
 #undef None

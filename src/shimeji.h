@@ -13,9 +13,10 @@ private :
 	sf::RenderWindow window;
 	sf::Clock clock;
 	sf::Time startFalling;
-	std::vector<sf::Image> frames;
-	std::vector<std::string> frameName;
-	sf::Image toDisplay;
+	std::vector<sf::Image> framesI;
+	std::vector<sf::Texture> frames;
+	//std::vector<std::string> frameName;
+	sf::Sprite toDisplay;
 
 	int taskbarW = 40,
         spritew = 128,

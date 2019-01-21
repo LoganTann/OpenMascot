@@ -11,6 +11,7 @@ Development status : Working on... (no beta version...)
 ### Compiling
 
 Linux:
-g++ Transparent.cpp -lsfml-graphics -lsfml-window -lsfml-system -lX11 -lXext
+g++ main.cpp system.cpp shimeji.cpp -lsfml-graphics -lsfml-window -lsfml-system -lX11 -lXext
+
 
 No windows/mac version ATM

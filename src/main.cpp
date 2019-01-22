@@ -10,14 +10,15 @@ int main(){
 
     bool open(1);
 
-    Shimeji shime1,shime2,shime3,shime4,shime5;
+    //Shimeji shime1,shime2,shime3,shime4,shime5;
+    Shimeji shime1;
 
     while (open) {
         if (shime1.update()==-1) open=false;
-        if (shime2.update()==-1) open=false;
+        /*if (shime2.update()==-1) open=false;
         if (shime3.update()==-1) open=false;
         if (shime4.update()==-1) open=false;
-        if (shime5.update()==-1) open=false;
+        if (shime5.update()==-1) open=false;*/
     }
     return 0;
 }

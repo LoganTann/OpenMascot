@@ -13,14 +13,14 @@ Shimeji::Shimeji(){
     simpleImg.loadFromFile("img/shime1.png");*/
     sf::Image newImg;
 	sf::Texture newFrame;
-    frames.push_back(newFrame);
-    frames.push_back(newFrame);
-    framesI.push_back(newImg);
-    framesI.push_back(newImg);
-    framesI[0].loadFromFile("img/shime1.png");
-    framesI[1].loadFromFile("img/shime4.png");
-    frames[0].loadFromImage(framesI[0]);
-    frames[1].loadFromImage(framesI[1]);
+	std::string spritesImg[] = {"img/shime1.png","img/shime4.png","img/shime01.png", "img/shime18.png", "img/shime19.png", "img/shime20.png", "img/shime29.png" };
+
+	for (int i(0); i<std::size(spritesImg);i++){
+    	frames.push_back(newFrame);
+    	framesI.push_back(newImg);
+        framesI[i].loadFromFile(spritesImg[i]);
+    	frames[i].loadFromImage(framesI[i]);
+	}
 
     changeImg(1);
 
@@ -64,16 +64,29 @@ int Shimeji::update(){
         }
 
     }
-    if (falling) {
-        float t = clock.getElapsedTime().asMilliseconds()-startFalling.asMilliseconds();
-        y = initialy + 0.0001 * (t*t); 
-        if (y>scrh-spriteh) {
-            y = scrh-spriteh; 
-            fall(false);
+    //ANIMATIONS
+        if (falling) {
+            int t = clock.getElapsedTime().asMilliseconds()-startFalling.asMilliseconds();
+            y = initialy + 0.0009 * (t*t); 
+            if (y>scrh-spriteh) {
+                y = scrh-spriteh; 
+                fall(false);
+                animate("bouncing");
+            }
+            window.setPosition(sf::Vector2i( x, y));
         }
-        window.setPosition(sf::Vector2i( x, y));
-    }
-
+        if (!animation.empty()){
+            float t = clock.getElapsedTime().asSeconds()-startAnimating.asSeconds();
+            if (t>animationFrameIter){
+                animationFrameIter+=0.25;
+                if (animationFrameIter*4==animation.size()) {
+                    animation.clear();
+                    changeImg(0);
+                } else{
+                    changeImg(animation[animationFrameIter*4]);
+                }
+            }
+        }
     window.clear(sf::Color::Transparent);
     window.draw(toDisplay);
     window.display();
@@ -87,15 +100,36 @@ int Shimeji::fall(bool on){
 		startFalling = clock.getElapsedTime();
 		falling=true;
         changeImg(1);
+
 	} else {
 		falling=false;
-		changeImg(0);
+        if (mousePressing)
+          changeImg(2);
+        else 
+		  changeImg(0);
 	}
 	return 0;
 }
 
 int Shimeji::changeImg(int index){
-	toDisplay.setTexture(frames[index]);
-	shapeOk = setShape(window.getSystemHandle(), framesI[index]);
+    if (befIndex!=index){
+	   toDisplay.setTexture(frames[index]);
+	   shapeOk = setShape(window.getSystemHandle(), framesI[index]);
+       befIndex = index;
+    }
 	return 0;
 }
+
+int Shimeji::animate(std::string state){ 
+    animation.clear();
+    if (state=="bouncing"){
+        //0 will not be interpreted
+        animation = {3,4,4,3,5,5,5,6};
+    }
+    else
+        return 1;
+    animationFrameIter = 0;
+    changeImg(animation[0]);
+    startAnimating = clock.getElapsedTime() - sf::seconds(0.25f);
+    //startAnimating -= ;
+};

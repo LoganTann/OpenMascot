@@ -11,7 +11,7 @@ Development status : Working on... (no beta version...)
 ### Compiling
 
 Linux:
-g++ main.cpp system.cpp shimeji.cpp -lsfml-graphics -lsfml-window -lsfml-system -lX11 -lXext
+g++ main.cpp system.cpp shimeji.cpp -lsfml-graphics -lsfml-window -lsfml-system -lX11 -lXext --std=c++17 -O3
 
 
 No windows/mac version ATM

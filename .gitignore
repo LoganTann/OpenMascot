@@ -2,6 +2,7 @@ a.out
 ignore
 Thumbs.db
 
+OpenMascot
 
 # cmake caches
 *CMakeFiles

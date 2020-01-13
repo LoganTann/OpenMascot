@@ -6,6 +6,6 @@ find_library( SFML-SYSTEM sfml-system REQUIRED )
 find_library( SFML-WINDOW sfml-window REQUIRED )
 find_library( SFML-GRAPHICS sfml-graphics REQUIRED )
 
-add_executable(OpenMascot main.cpp shimeji.cpp system.cpp)
+add_executable(OpenMascot main.cpp mascot.cpp system.cpp)
 
 target_link_libraries(OpenMascot ${X11} ${XEXT} ${SFML-SYSTEM} ${SFML-WINDOW} ${SFML-GRAPHICS})

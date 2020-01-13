@@ -98,14 +98,14 @@ bool defaultProp(Window window) {
                              reinterpret_cast<const unsigned char *>(&skip_taskbar), /* actual data */
                              1         /* number of elements */
                             );
-
+	XFlush(display);
     XCloseDisplay(display);
     return true;
 }
 
 
 /*    int wininit(Window wnd){
-        
+
         retrun 0;
     }
 
@@ -128,7 +128,7 @@ bool defaultProp(Window window) {
         }
     }*/
 #undef None // None conflicts with SFML
-/*    
+/*
 #elif defined (SFML_SYSTEM_MACOS)
     bool setShape(sf::WindowHandle handle, const sf::Image& image);
     bool setTransparency(sf::WindowHandle handle, unsigned char alpha);

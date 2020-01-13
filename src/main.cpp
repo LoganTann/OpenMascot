@@ -1,25 +1,23 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "system.h"
-#include "shimeji.h"
+#include "mascot.h"
 
 int main(){
-    std::cout<<"CPP SHIMEJI\n";
-    std::cout<<"C++ shimeji rewriting for linux (and soon, cross platform)\n";
-    std::cout<<"Under the MIT license. Copyright (c) 2019 Logan Tann/KageTeam[Fr]\n\n";
+    std::cout<<"OpenMascot V1.1\n";
+    std::cout<<"C++ shimeji-like software\n";
+    std::cout<<"Under the MIT license. Copyright (c) 2019, 2020 Logan Tann\n\n";
 
     bool open(1);
+	const short int i = 0;
 
-    //Shimeji shime1,shime2,shime3,shime4,shime5;
-    Shimeji shime1;
+	Mascot mascot;
 
     while (open) {
-        if (shime1.update()==-1) open=false;
-        /*if (shime2.update()==-1) open=false;
-        if (shime3.update()==-1) open=false;
-        if (shime4.update()==-1) open=false;
-        if (shime5.update()==-1) open=false;*/
+		const std::string state = mascot.update();
+		if (state=="quit"){
+			open = false;
+		}
     }
     return 0;
 }
-

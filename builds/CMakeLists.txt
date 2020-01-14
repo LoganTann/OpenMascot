@@ -3,7 +3,6 @@ set(CMAKE_BUILD_TYPE Debug)
 project(OpenMascot VERSION 1.1)
 
 SET(CMAKE_CXX_FLAGS "-std=c++17")
-SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY "builds/")
 
 add_definitions(-g -O2)
 
@@ -13,6 +12,6 @@ find_library( SFML-SYSTEM sfml-system REQUIRED )
 find_library( SFML-WINDOW sfml-window REQUIRED )
 find_library( SFML-GRAPHICS sfml-graphics REQUIRED )
 
-add_executable(OpenMascot src/main.cpp src/mascot.cpp src/system.cpp)
+add_executable(OpenMascot ../src/main.cpp ../src/mascot.cpp ../src/system.cpp)
 
 target_link_libraries(OpenMascot ${X11} ${XEXT} ${SFML-SYSTEM} ${SFML-WINDOW} ${SFML-GRAPHICS})

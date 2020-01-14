@@ -1,19 +1,20 @@
-#include <iostream>
-#include <SFML/Graphics.hpp>
 #include "mascot.h"
 #include "system.h"
 
 Mascot::Mascot(){
 	// Create Window
 	window.create( sf::VideoMode(128,128, 32), "Shimeji", sf::Style::None );
-	// Hide taskbar icon if possible
-	defaultProp(window.getSystemHandle());
-	// Set window params
+	winHandle = window.getSystemHandle();
 	window.setFramerateLimit(60);
-	// Get cursor position
-	const sf::Vector2i position = sf::Mouse::getPosition();
-	// Set the X position to mouse X position
-	x = position.x;
+	// Hide taskbar icon if possible
+	defaultProp(winHandle);
+
+	// var init
+	x = sf::Mouse::getPosition().x;
+	pressing = grabbing = false;
+
+	resetPhysics();
+	v0.y = 1;
 
 	// Image loading
 	sf::Image newImg;
@@ -28,6 +29,7 @@ Mascot::Mascot(){
 		frames[i].loadFromImage(framesI[i]);
 	}
 	currentFrame = sf::Sprite(frames[0]);
+	setShape(winHandle, framesI[0]);
 }
 
 std::string Mascot::update(){
@@ -35,30 +37,50 @@ std::string Mascot::update(){
 	const int dt = tick();
 
 	while (window.pollEvent(event)) {
+
+		const sf::Vector2i currentMousePos = sf::Mouse::getPosition();
+
 		if (event.type == sf::Event::Closed || (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)){
 			return "quit";
 
-		} else if (event.type == sf::Event::MouseButtonPressed){
+		} else if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left){
 
-			if (not grabbing or clickTime > 200){
+			if ( (!grabbing) or clickTime > 200){
 				// the moves averages are computed in 200ms max. After, it will reset.
 				clickTime = 0;
-				pos0 = sf::Mouse::getPosition();
+				pos0 = currentMousePos;
 				grabbing = true;
+				std::cerr<<"\nstart ";
 			} else {
 				clickTime += dt;
+				x = currentMousePos.x;
+				y = currentMousePos.y;
 			}
-
-		} else if (event.type == sf::Event::MouseButtonReleased){
-
-			grabbing = false;
-			v0 = (sf::Mouse::getPosition() - pos0)); // determine velocity per seconds based on mouse movment
-			std::cout<<std::endl<<"v0X = "<<v0.x<<" v0Y = "<<v0.y<<std::endl;
-
-		} else if (event.type == sf::Event::MouseMoved) {
+		} else if (grabbing){
+			if ( sf::Mouse::isButtonPressed(sf::Mouse::Left) ) {
+				clickTime += dt;
+				x = currentMousePos.x;
+				y = currentMousePos.y;
+			} else {
+				grabbing = false;
+				// determine velocity by mouse movement
+				v0.x = currentMousePos.x - pos0.x;
+				v0.y = 1.2 * (currentMousePos.y - pos0.y); // increase his value by 120%
+				pos0 = currentMousePos; // reset pos0
+			}
 		}
+
 	}
 
+	if (!grabbing) {
+		physics(dt);
+	}
+	if (!window.hasFocus()) {
+		window.requestFocus();
+		defaultProp(winHandle);
+	}
+
+	window.setPosition(sf::Vector2i(x, y));
 	window.clear(sf::Color::Transparent);
 	window.draw(currentFrame);
 	window.display();
@@ -70,4 +92,39 @@ int Mascot::tick(){
 	const int dt = currentTime - lastTime;
 	lastTime = currentTime;
 	return dt;
+}
+
+int Mascot::physics(const int dt) {
+	if (!applyPhysics) {
+		if (v0.x != 0 || v0.y != 0){
+			applyPhysics = true;
+			physics_t = 0;
+		} else {
+			return 1;
+		}
+	} else {
+		physics_t += dt;
+
+		y += v0.y * dt * 0.001;
+		v0.y += 1500 * dt * 0.001;
+		x = v0.x * 0.001 * physics_t + pos0.x;
+		
+		if (y>720){
+			y = 1280;
+			resetPhysics();
+		}/*
+		if (x < 0 or x > 1280){
+			physics_t = 0;
+			x = (x<0)? 0 : 1280;
+			v0 = sf::Vector2i(0,0);
+			applyPhysics = false;
+		}*/
+	}
+	return 0;
+}
+int Mascot::resetPhysics(){
+	physics_t = 0;
+	v0 = sf::Vector2i(0,0);
+	applyPhysics = false;
+	std::cerr<<"reset physics\n";
 }

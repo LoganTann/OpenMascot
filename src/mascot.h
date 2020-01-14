@@ -1,18 +1,25 @@
 #ifndef SHIMEJI_H
 #define SHIMEJI_H
 
+#include <iostream>
+#include <SFML/Graphics.hpp>
+
+#include <cmath>
+
 class Mascot {
 	//actually, not implemented to make more than 1 mascot.
 public:
 	Mascot();
 	std::string update();
+	int physics(const int dt);
 	int tick();
+	int resetPhysics();
 
 private :
 	//sfml
 	sf::RenderWindow window;
+	sf::WindowHandle winHandle;
 	sf::Clock clock;
-	//sf::Time startFalling,startAnimating;
 
 	// Frames loaded
 	std::vector<sf::Image> framesI;
@@ -22,7 +29,7 @@ private :
 
 	unsigned int lastTime, physics_t;
 	int x,y, clickTime;
-	bool pressing, grabbing;
+	bool pressing, grabbing, applyPhysics;
 	sf::Vector2i v0, pos0;
 };
 

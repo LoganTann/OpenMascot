@@ -1,6 +1,6 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
-
+#include "system.h"
 /*#if defined (SFML_SYSTEM_WINDOWS)
     #include <windows.h>
 
@@ -81,13 +81,28 @@ bool defaultProp(Window window) {
     Atom skip_taskbar = XInternAtom(display, "_NET_WM_STATE_SKIP_TASKBAR", True);
     Atom wm_state     = XInternAtom(display, "_NET_WM_STATE", True);
 
-    if(wm_state == None) {
+	Window target_win = XDefaultRootWindow(display);
+
+    long length;
+    Atom type;
+    int size;
+
+	Atom workarea = XInternAtom(display, "_NET_WORKAREA", True);
+	const char *data = Get_Window_Property_Data_And_Type (
+						display, target_win, workarea, &length, &type, &size);
+	
+	std::cerr<<std::endl<<" data : "<<data<<std::endl;
+
+    if(wm_state == 0) {
         std::cerr << "Oopsie on _NET_WM_STATE\n";
         return false;
-    } else if(skip_taskbar == None) {
+    } else if (skip_taskbar == 0) {
         std::cerr << "Oopsie on _NET_WM_STATE_SKIP_TASKBAR\n";
         return false;
-    }
+    } else if (workarea == 0) {
+        std::cerr << "Oopsie on _NET_WORKAREA\n";
+        return false;
+	}
 
     XChangeProperty(display,   /* connection to x server */
                              window,    /* window whose property we want to change */
@@ -101,6 +116,45 @@ bool defaultProp(Window window) {
 	XFlush(display);
     XCloseDisplay(display);
     return true;
+}
+
+
+// ROUTINES from xprop source code.
+static const char *
+Get_Window_Property_Data_And_Type (Display *display, Window target_win, Atom atom,
+                                   long *length, Atom *type, int *size)
+{
+    Atom actual_type;
+    int actual_format;
+    unsigned long nitems;
+    unsigned long nbytes;
+    unsigned long bytes_after;
+    unsigned char *prop;
+    int status;
+	const int max_len = 500000;
+
+    status = XGetWindowProperty(display, target_win, atom, 0, (max_len+3)/4,
+				False, AnyPropertyType, &actual_type,
+				&actual_format, &nitems, &bytes_after,
+				&prop);
+    if (status == BadWindow | status != Success)
+		std::cerr<<"XGetWindowProperty failed !"<<std::endl;
+
+    if (actual_format == 32)
+	nbytes = sizeof(long);
+    else if (actual_format == 16)
+	nbytes = sizeof(short);
+    else if (actual_format == 8)
+	nbytes = 1;
+    else if (actual_format == 0)
+        nbytes = 0;
+    else
+	abort();
+    // std::min(, max_len);
+	*length = nitems * nbytes;
+    *type = actual_type;
+    *size = actual_format;
+    return (const char *)prop;
 }
 
 

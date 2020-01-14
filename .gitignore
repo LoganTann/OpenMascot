@@ -9,3 +9,8 @@ OpenMascot
 *CMakeCache.txt
 *cmake_install.cmake
 *Makefile
+
+
+#temp :
+*.png
+*conf/

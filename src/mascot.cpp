@@ -19,7 +19,7 @@ Mascot::Mascot(){
 	// Image loading
 	sf::Image newImg;
 	sf::Texture newFrame;
-	std::string spritesImg[] = {"img/shime1.png","img/shime4.png","img/shime1.png", "img/shime18.png", "img/shime19.png", "img/shime20.png", "img/shime29.png" };
+	std::string spritesImg[] = {"img/shime1.png"};
 
 	for (int i(0); i<std::size(spritesImg);i++){
 		// Load and store all images defined by spritesImg[]

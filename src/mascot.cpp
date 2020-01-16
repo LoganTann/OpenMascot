@@ -76,7 +76,6 @@ std::string Mascot::update(){
 		physics(dt);
 	}
 	if (!window.hasFocus()) {
-		window.requestFocus();
 		defaultProp(winHandle);
 	}
 
@@ -108,7 +107,7 @@ int Mascot::physics(const int dt) {
 		y += v0.y * dt * 0.001;
 		v0.y += 1500 * dt * 0.001;
 		x = v0.x * 0.001 * physics_t + pos0.x;
-		
+
 		if (y>720){
 			y = 1280;
 			resetPhysics();

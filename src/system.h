@@ -9,8 +9,6 @@
 bool setShape(Window wnd, const sf::Image& image);
 bool defaultProp(Window window);
 //bool setTransparency(Window wnd, unsigned char alpha);
-static const char *
-Get_Window_Property_Data_And_Type (Display* display, Window target_win, Atom atom,
-                                   long *length, Atom *type, int *size);
+std::string exec(const char* cmd);
 #undef None
 #endif

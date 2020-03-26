@@ -14,7 +14,7 @@ public:
 	int physics(const int dt);
 	int tick();
 	int resetPhysics();
-
+	void setPos(int x, int y);
 private :
 	//sfml
 	sf::RenderWindow window;
@@ -31,6 +31,7 @@ private :
 	int x,y, clickTime;
 	bool pressing, grabbing, applyPhysics;
 	sf::Vector2i v0, pos0;
+	std::array<int, 4> workarea;
 };
 
 

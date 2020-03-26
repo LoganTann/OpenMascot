@@ -8,6 +8,7 @@ Mascot::Mascot(){
 	window.setFramerateLimit(60);
 	// Hide taskbar icon if possible
 	defaultProp(winHandle);
+	workarea = net_get_workarea();
 
 	// var init
 	x = sf::Mouse::getPosition().x;
@@ -31,7 +32,12 @@ Mascot::Mascot(){
 	currentFrame = sf::Sprite(frames[0]);
 	setShape(winHandle, framesI[0]);
 }
-
+void Mascot::setPos(int x=0, int y=0){
+	if ( x != 0 )
+		this->x = x;
+	if ( y != 0 )
+		this->y = y;
+}
 std::string Mascot::update(){
 	sf::Event event;
 	const int dt = tick();
@@ -50,7 +56,6 @@ std::string Mascot::update(){
 				clickTime = 0;
 				pos0 = currentMousePos;
 				grabbing = true;
-				std::cerr<<"\nstart ";
 			} else {
 				clickTime += dt;
 				x = currentMousePos.x;
@@ -74,9 +79,6 @@ std::string Mascot::update(){
 
 	if (!grabbing) {
 		physics(dt);
-	}
-	if (!window.hasFocus()) {
-		defaultProp(winHandle);
 	}
 
 	window.setPosition(sf::Vector2i(x, y));
@@ -108,8 +110,8 @@ int Mascot::physics(const int dt) {
 		v0.y += 1500 * dt * 0.001;
 		x = v0.x * 0.001 * physics_t + pos0.x;
 
-		if (y>720){
-			y = 1280;
+		if (y > workarea[1] + workarea[3] - 128){ //wa.x + wa.h
+			y = workarea[1] + workarea[3] - 128;
 			resetPhysics();
 		}/*
 		if (x < 0 or x > 1280){
@@ -125,5 +127,4 @@ int Mascot::resetPhysics(){
 	physics_t = 0;
 	v0 = sf::Vector2i(0,0);
 	applyPhysics = false;
-	std::cerr<<"reset physics\n";
 }

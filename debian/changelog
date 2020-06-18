@@ -1,0 +1,11 @@
+openmascot (1.0+git20200326-0ubuntu1) UNRELEASED; urgency=medium
+
+  * New upstream release
+
+ -- NaSH <lenashou@gmail.com>  Thu, 18 Jun 2020 10:24:02 +0200
+
+openmascot (1.0-0ddebs1) unstable; urgency=medium
+
+  * Initial release
+
+ -- Nicolas HOUDELOT <nicolas@demosdebs.org>  Fri, 17 Jan 2020 00:21:17 +0100

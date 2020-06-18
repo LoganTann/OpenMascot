@@ -1,0 +1,17 @@
+Description: change data path
+ on system install, data path should be in /usr/share, so we have to change it in the code
+Author: Nicolas HOUDELOT (nicolas@demosdebs.org)
+Last-Update: 2020-06-18
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- a/src/mascot.cpp
++++ b/src/mascot.cpp
+@@ -20,7 +20,7 @@
+ 	// Image loading
+ 	sf::Image newImg;
+ 	sf::Texture newFrame;
+-	std::string spritesImg[] = {"img/shime1.png"};
++	std::string spritesImg[] = {"/usr/share/openmascot/img/shime1.png"};
+ 
+ 	for (int i(0); i<std::size(spritesImg);i++){
+ 		// Load and store all images defined by spritesImg[]

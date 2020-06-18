@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Name=OpenMascot
+GenericName=utilities
+Comment=A shimeji-like software in cpp for Linux
+Type=Application
+Exec=/usr/bin/OpenMascot
+Icon=openmascot
+Categories=
+Name[fr_FR]=OpenMascot
+Comment[fr_FR]=Un logiciel comme shimeji en C++ pour Linux

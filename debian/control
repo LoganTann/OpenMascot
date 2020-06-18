@@ -1,0 +1,21 @@
+Source: openmascot
+Section: utils
+Priority: optional
+Maintainer: Nicolas HOUDELOT <nicolas@demosdebs.org>
+Build-Depends:
+ debhelper (>=10),
+ cmake,
+ libx11-dev,
+ libxext-dev,
+ libsfml-dev,
+ pandoc
+Standards-Version: 4.5.0
+Homepage: https://github.com/logantann/shimeji-re
+
+Package: openmascot
+Architecture: any
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends}
+Description: A shimeji-like software in cpp for Linux
+ A shimeji-like software in cpp for Linux

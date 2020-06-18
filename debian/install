@@ -1,0 +1,4 @@
+debian/resources/openmascot.desktop usr/share/applications/
+debian/resources/openmascot.png usr/share/icons/hicolor/128x128/apps/
+build/openmascot usr/bin/
+builds/img/shime1.png /usr/share/openmascot/img/

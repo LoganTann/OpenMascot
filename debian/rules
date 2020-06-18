@@ -1,0 +1,14 @@
+#!/usr/bin/make -f
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+%:
+	dh $@ --parallel --buildsystem=cmake --builddirectory=build
+
+override_dh_auto_configure:
+	cp builds/CMakeLists.txt .
+	dh_auto_configure
+
+override_dh_install:
+	dh_install
+	pandoc -s -t man -f markdown debian/openmascot.1.md -o debian/openmascot.1

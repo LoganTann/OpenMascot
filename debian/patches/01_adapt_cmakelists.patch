@@ -1,0 +1,18 @@
+Description: updating CMakeLists
+ updating CMakeLists to make it more compatible with packaging
+Author: Nicolas HOUDELOT (nicolas@demosdebs.org)
+Last-Update: 2020-06-18
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- a/builds/CMakeLists.txt
++++ b/builds/CMakeLists.txt
+@@ -12,6 +12,6 @@
+ find_library( SFML-WINDOW sfml-window REQUIRED )
+ find_library( SFML-GRAPHICS sfml-graphics REQUIRED )
+ 
+-add_executable(OpenMascot ../src/main.cpp ../src/mascot.cpp ../src/system.cpp)
++add_executable(openmascot src/main.cpp src/mascot.cpp src/system.cpp)
+ 
+-target_link_libraries(OpenMascot ${X11} ${XEXT} ${SFML-SYSTEM} ${SFML-WINDOW} ${SFML-GRAPHICS})
+\ No newline at end of file
++target_link_libraries(openmascot ${X11} ${XEXT} ${SFML-SYSTEM} ${SFML-WINDOW} ${SFML-GRAPHICS})
